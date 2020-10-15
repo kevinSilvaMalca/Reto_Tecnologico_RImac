@@ -14,7 +14,7 @@
 ### Backend
 - Es necesario configurar los environment de AWS
 
-serverless config credentials --provider aws --key YOUR_KEY --secret YOUR_SECRET_KEU
+serverless config credentials --provider aws --key YOUR_KEY --secret YOUR_SECRET_KEY
 
 
 
