@@ -1,0 +1,23 @@
+{
+  "name": "Serveless",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.771.0",
+    "axios": "^0.20.0",
+    "express": "^4.17.1",
+    "md5": "^2.3.0",
+    "serverless-http": "^2.6.0",
+    "serverless-offline": "^6.8.0",
+    "serverless-plugin-include-dependencies": "^4.1.0",
+    "swagger-ui-express": "^4.1.4",
+    "uuid": "^8.3.1"
+  }
+}

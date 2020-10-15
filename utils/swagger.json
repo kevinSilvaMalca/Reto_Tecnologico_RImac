@@ -1,0 +1,100 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Documentación de prueba en Swagger para docuemntar servicos REST",
+        "version": "1.0.0",
+        "title": "Documentación para Proyecto de Refinanciamiento",
+        "contact": {
+            "email": "diego.quiroz@acceso.com.pe"
+        }
+    },
+    "host": "0.0.0.0:5025",
+    "basePath": "/refinanciamiento",
+    "tags": [
+        {
+            "name": "refinanciamiento",
+            "description": "Solicitud de refinanciamiento",
+            "externalDocs": {
+                "description": "Puede ser golpeado directament desde insomnia"
+            }
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "/cliente": {
+            "post": {
+                "tags": [
+                    "refinanciamiento"
+                ],
+                "summary": "Endpoint for request a 'Refinanciamiento' through landing page",
+                "description": "This is a resource for validate acceso's customer and save information",
+                "operationId": "postData",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "require": true,
+                        "schema": {
+                            "$ref": "#/definitions/refinanciamiento"
+                        }
+                    }
+                ],
+                "responses": {
+                    "00": {
+                        "description": "Se ejecuto correctamente"
+                    },
+                    "01": {
+                        "description": "Solicitud ya procesada y guardada"
+                    },
+                    "99": {
+                        "description": "Se cayo el sistema"
+                    },
+                    "02": {
+                        "description": "No es cliente acceso"
+                    },
+                    "66": {
+                        "description": "Error para validar cliente de acceso lb"
+                    }
+                }
+            }
+        }
+    },
+
+    "definitions": {
+        "refinanciamiento": {
+            "type": "object",
+            "properties": {                
+                "documento": {
+                    "type": "string"
+                },
+                "tipoDocumento": {
+                    "type": "integer",
+                    "default": 1
+                }
+            },
+            "xml": {
+                "name": "User"
+            }
+        },
+        "ApiResponse": {
+            "type": "object",
+            "properties": {
+                "codRes": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "externalDocs": {
+        "description": "Find out more about Swagger",
+        "url": "http://swagger.io"
+    }
+}

@@ -1,0 +1,213 @@
+
+service: api
+
+plugins:
+  - serverless-offline
+  - serverless-plugin-include-dependencies
+
+package:
+  exclude:
+    - node_modules/**
+
+frameworkVersion: '2'
+
+custom:
+  settings:
+    POST_TABLE_PEOPLE: people
+    POST_TABLE_PLANET: planet
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: us-east-2
+  stage: dev
+  environment: ${self:custom.settings}
+    #<NAME_ENV>: ${any} || words
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+      #  - dynamodb:*
+        - dynamodb:DescribeTable
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteITem
+      Resource:
+      - "arn:aws:dynamodb:us-east-2:*:table/people"
+      - "arn:aws:dynamodb:us-east-2:*:table/planet"
+      #other way
+      #Resource:
+      #- { "Fn::GetAtt": ["", "Arn"] }
+
+
+functions:
+
+  swagger:
+    handler: swagger.swagger
+    events:
+      - http:
+          path: /swagger
+          method: get
+
+  ### for any paths
+  #events:
+  #    - http: ANY /
+  #    - http: ANY {proxy+}
+
+
+  createPost:
+    handler: handler.createPost
+    events:
+    - http:
+        path: /post/people/{number}
+        method: post
+        request:
+          parameters:
+            paths:
+              number: true
+  
+  getAllPots:
+    handler: handler.getAllPots
+    events:
+    - http:
+        path: /posts
+        method: get
+
+  getPots:
+    handler: handler.getPots
+    events:
+    - http:
+        path: /posts/{number}
+        method: get
+        request:
+          parameters:
+            paths:
+              number: true
+
+  getPot:
+    handler: handler.getPot
+    events:
+    - http:
+        path: /post/{id}
+        method: get
+        request:
+          parameters:
+            paths:
+              id: true
+
+  putPost:
+    handler: handler.putPost
+    events:
+    - http:
+        path: /post/update/{id}
+        method: put
+        request:
+          parameters:
+            paths:
+              id: true
+
+  deletePost:
+    handler: handler.deletePost
+    events:
+    - http:
+        path: /post/{id}
+        method: delete
+        request:
+          parameters:
+            paths:
+              id: true
+
+
+  createPlanet:
+    handler: handler.createPlanet
+    events:
+    - http:
+        path: /create/planet/{number}
+        method: post
+        request:
+          parameters:
+            paths:
+              number: true
+  
+  getAllPlanet:
+    handler: handler.getAllPlanet
+    events:
+    - http:
+        path: /planet
+        method: get
+
+  getPlanets:
+    handler: handler.getPlanets
+    events:
+    - http:
+        path: /get/planets/{number}
+        method: get
+        request:
+          parameters:
+            paths:
+              number: true
+
+  getPlanet:
+    handler: handler.getPlanet
+    events:
+    - http:
+        path: /planet/{id}
+        method: get
+        request:
+          parameters:
+            paths:
+              id: true
+
+  putPlanet:
+    handler: handler.putPlanet
+    events:
+    - http:
+        path: /planet/update/{id}
+        method: put
+        request:
+          parameters:
+            paths:
+              id: true
+
+  deletePlanet:
+    handler: handler.deletePlanet
+    events:
+    - http:
+        path: /planet/{id}
+        method: delete
+        request:
+          parameters:
+            paths:
+              id: true
+
+
+resources:
+  Resources:
+    PostsTable: ## or '<DynamoDBTableName>'
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+        KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: people
+
+    PlanetTable: ## or '<DynamoDBTableName>'
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+        KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: planet
